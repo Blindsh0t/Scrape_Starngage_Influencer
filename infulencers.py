@@ -9,8 +9,9 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 timestamp = f"{pd.Timestamp('today'):%Y-%m-%d %I-%M %p}"
 
-cwd = os.getcwd()
-csv_path = ''.join((cwd, timestamp, '.csv'))
+cwd = os.getcwd().split('/')[:3]
+os.chdir(('/'.join(cwd) + '/Desktop'))
+csv_name = timestamp + '.csv'
 
 
 def country_list():
@@ -57,7 +58,7 @@ def get_df():
     return first_df
 
 
-def clean_df():
+def main():
     """Cleans the data : extract Instagram username & sperate name, remove unnamed & # columns, rearrange columns and remove duplicates before saving """
     inward_df = get_df()
 
@@ -71,8 +72,8 @@ def clean_df():
     df = df[['Name', 'Username', 'Followers',
              'Engagement Rate', 'Country', 'Topics']]
     df = df.drop_duplicates()
-    df.to_csv(csv_path, index=False)
+    df.to_csv(csv_name, index=False)
 
 
 if __name__ == '__main__':
-    clean_df()
+    main()
